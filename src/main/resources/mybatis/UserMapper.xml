@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hlq.persistence.UsersMapper">
+
+    <resultMap id="userMap" type="cn.hlq.model.User">
+        <id column="uid" property="id"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <collection property="roles" ofType="cn.hlq.model.Role">
+            <id column="rid" property="id"/>
+            <result column="role" property="name"/>
+            <result column="description" property="description"/>
+            <collection property="permissions" ofType="java.lang.String">
+                <constructor>
+                    <arg column="permissions"/>
+                </constructor>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="cn.hlq.model.User">
+        insert into users values(#{id},#{username},#{email},#{password})
+    </insert>
+    
+    <select id="getUser" resultMap="userMap">
+       SELECT
+            u.id AS uid,
+            u.username AS username,
+            u.email AS email,
+            u.`password` AS `password`,
+            r.id AS rid,
+            r.role AS role,
+            r.description AS description,
+            p.permissions as permissions
+        FROM
+            users AS u
+            LEFT JOIN users_roles AS ur ON u.id = ur.users_id
+            LEFT JOIN roles AS r ON r.id = ur.roles_id
+            LEFT JOIN roles_permissions as p on r.id = p.role_id
+        where
+            u.id = #{id}
+    </select>
+
+    <select id="findUser" resultType="cn.hlq.model.User">
+        select id as id,username as username,email email,password password from users where username = #{username}
+    </select>
+
+    <update id="updateUser" parameterType="cn.hlq.model.User">
+        update users set username = #{user.username},password=#{user.password},email=#{user.email} where id=#{user.id}
+    </update>
+</mapper>

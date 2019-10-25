@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstarp/css/simple.css}" href="../static/bootstrap/css/simple.css"/>
+</head>
+<body>
+<div id="box">
+    <div class="title">Apache Shiro Sample App - Login</div>
+
+    <div class="content">
+        <form th:action="@{/login}" name="loginForm" method="get">
+
+            <errors path="*" element="div" cssClass="errors"/>
+
+            <div><div class="form-label">Username:</div><input path="username"/></div>
+            <div><div class="form-label">Password:</div><input password path="password"/></div>
+            <div><checkbox path="rememberMe"/> Remember Me</div>
+            <div><input type="submit" value="Login"/></div>
+        </form>
+
+        <div>Don't have an account? <a href="/s/signup">Sign up</a></div>
+    </div>
+</div>
+
+<p>
+    Users created through the signup form have the role "user".  You can also log in as admin/admin, which has the
+    "admin" role.
+</p>
+</body>
+</html>
